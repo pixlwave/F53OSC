@@ -1,9 +1,9 @@
 //
-//  F53OSCPacket.h
+//  F53OSCServer.h
 //
-//  Created by Sean Dougall on 1/17/11.
+//  Created by Sean Dougall on 3/23/11.
 //
-//  Copyright (c) 2011-2018 Figure 53 LLC, https://figure53.com
+//  Copyright (c) 2011-2020 Figure 53 LLC, https://figure53.com
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,17 +26,29 @@
 
 #import <Foundation/Foundation.h>
 
-#import "F53OSCSocket.h"
+#import "F53OSC.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface F53OSCPacket : NSObject <NSCopying>
+#define F53_OSC_SERVER_DEBUG 0
 
-@property (strong, nullable) F53OSCSocket *replySocket; ///< If this message was received from a client, this is the socket to use to reply.
+@interface F53OSCServer : NSObject <F53OSCServer, GCDAsyncSocketDelegate, GCDAsyncUdpSocketDelegate>
 
-- (nullable NSData *) packetData;
-- (nullable NSString *) asQSC;
++ (NSString *) validCharsForOSCMethod;
++ (nullable NSPredicate *) predicateForAttribute:(NSString *)attributeName 
+                              matchingOSCPattern:(NSString *)pattern;
+
+@property (nonatomic, weak, nullable)   id <F53OSCPacketDestination> delegate;
+@property (nonatomic, strong, readonly) F53OSCSocket *udpSocket;
+@property (nonatomic, strong, readonly) F53OSCSocket *tcpSocket;
+@property (nonatomic, assign)           UInt16 port;
+@property (nonatomic, assign)           UInt16 udpReplyPort;
+
+- (instancetype) initWithDelegateQueue:(nullable dispatch_queue_t)queue;
+
+- (BOOL) startListening;
+- (void) stopListening;
 
 @end
 

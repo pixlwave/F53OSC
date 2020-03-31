@@ -1,9 +1,9 @@
 //
-//  F53OSCTimeTag.h
+//  F53OSCPacket.m
 //
 //  Created by Sean Dougall on 1/17/11.
 //
-//  Copyright (c) 2011-2018 Figure 53 LLC, https://figure53.com
+//  Copyright (c) 2011-2020 Figure 53 LLC, https://figure53.com
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +24,35 @@
 //  THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+#if !__has_feature(objc_arc)
+#error This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#endif
+
+#import "F53OSCPacket.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface F53OSCTimeTag : NSObject 
+@implementation F53OSCPacket
 
-@property (assign) UInt32 seconds;
-@property (assign) UInt32 fraction;
+- (id) copyWithZone:(nullable NSZone *)zone
+{
+    F53OSCPacket *copy = [[self class] allocWithZone:zone];
+    copy.replySocket = self.replySocket;
+    return copy;
+}
 
-+ (F53OSCTimeTag *) timeTagWithDate:(NSDate *)date;
-+ (F53OSCTimeTag *) immediateTimeTag;
+- (nullable NSData *) packetData
+{
+    // Defined by subclasses.
+    return nil;
+}
 
-- (NSData *) oscTimeTagData;
-+ (nullable F53OSCTimeTag *) timeTagWithOSCTimeBytes:(char *)buf;
+- (nullable NSString *) asQSC
+{
+    // Defined by subclasses.
+    return nil;
+}
 
 @end
 

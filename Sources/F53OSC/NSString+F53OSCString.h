@@ -1,9 +1,9 @@
 //
-//  F53OSCProtocols.h
+//  NSString+F53OSCString.h
 //
-//  Created by Christopher Ashworth on 1/30/13.
+//  Created by Sean Dougall on 1/17/11.
 //
-//  Copyright (c) 2013-2019 Figure 53 LLC, https://figure53.com
+//  Copyright (c) 2011-2020 Figure 53 LLC, https://figure53.com
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,25 +26,19 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol F53OSCPacketDestination;
-@class F53OSCMessage;
-
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol F53OSCServer <NSObject>
+@interface NSString (F53OSCStringAdditions)
 
-@property (nonatomic, weak, nullable)   id <F53OSCPacketDestination> delegate;
+- (NSData *) oscStringData;
++ (nullable NSString *) stringWithOSCStringBytes:(const char *)buf maxLength:(NSUInteger)maxLength bytesRead:(out NSUInteger *)outBytesRead;
 
-- (BOOL) startListening;
-- (void) stopListening;
+// Escapes characters that are special in regex (ICU v3) but not special in OSC.
++ (NSString *) stringWithSpecialRegexCharactersEscaped:(NSString *)string;
 
-@end
-
-
-@protocol F53OSCPacketDestination
-
-- (void) takeMessage:(nullable F53OSCMessage *)message;
+// deprecated
++ (nullable NSString *) stringWithOSCStringBytes:(const char *)buf maxLength:(NSUInteger)maxLength length:(NSUInteger *)outLength DEPRECATED_MSG_ATTRIBUTE("Use +stringWithOSCStringBytes:maxLength:bytesRead: instead");
 
 @end
 

@@ -1,9 +1,9 @@
 //
-//  F53OSCServer.h
+//  NSDate+F53OSCTimeTag.m
 //
-//  Created by Sean Dougall on 3/23/11.
+//  Created by Sean Dougall on 1/17/11.
 //
-//  Copyright (c) 2011-2019 Figure 53 LLC, https://figure53.com
+//  Copyright (c) 2011-2020 Figure 53 LLC, https://figure53.com
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,31 +24,28 @@
 //  THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+#if !__has_feature(objc_arc)
+#error This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#endif
 
-#import "F53OSC.h"
+#import "NSDate+F53OSCTimeTag.h"
+
+#import "F53OSCTimeTag.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define F53_OSC_SERVER_DEBUG 0
+@implementation NSDate (F53OSCTimeTagAdditions)
 
-@interface F53OSCServer : NSObject <F53OSCServer, GCDAsyncSocketDelegate, GCDAsyncUdpSocketDelegate>
+- (F53OSCTimeTag *) oscTimeTag
+{
+    return [F53OSCTimeTag timeTagWithDate:self];
+}
 
-+ (NSString *) validCharsForOSCMethod;
-+ (nullable NSPredicate *) predicateForAttribute:(NSString *)attributeName 
-                              matchingOSCPattern:(NSString *)pattern;
-
-@property (nonatomic, weak, nullable)   id <F53OSCPacketDestination> delegate;
-@property (nonatomic, strong, readonly) F53OSCSocket *udpSocket;
-@property (nonatomic, strong, readonly) F53OSCSocket *tcpSocket;
-@property (nonatomic, assign)           UInt16 port;
-@property (nonatomic, assign)           UInt16 udpReplyPort;
-
-- (instancetype) initWithDelegateQueue:(nullable dispatch_queue_t)queue;
-
-- (BOOL) startListening;
-- (void) stopListening;
+- (NSData *) oscTimeTagData
+{
+    return [[self oscTimeTag] oscTimeTagData];
+}
 
 @end
 

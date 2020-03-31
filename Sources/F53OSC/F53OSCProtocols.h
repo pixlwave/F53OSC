@@ -1,9 +1,9 @@
 //
-//  NSDate+F53OSCTimeTag.m
+//  F53OSCProtocols.h
 //
-//  Created by Sean Dougall on 1/17/11.
+//  Created by Christopher Ashworth on 1/30/13.
 //
-//  Copyright (c) 2011-2018 Figure 53 LLC, https://figure53.com
+//  Copyright (c) 2013-2020 Figure 53 LLC, https://figure53.com
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,28 +24,27 @@
 //  THE SOFTWARE.
 //
 
-#if !__has_feature(objc_arc)
-#error This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
-#endif
+#import <Foundation/Foundation.h>
 
-#import "NSDate+F53OSCTimeTag.h"
-
-#import "F53OSCTimeTag.h"
+@protocol F53OSCPacketDestination;
+@class F53OSCMessage;
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation NSDate (F53OSCTimeTagAdditions)
+@protocol F53OSCServer <NSObject>
 
-- (F53OSCTimeTag *) oscTimeTag
-{
-    return [F53OSCTimeTag timeTagWithDate:self];
-}
+@property (nonatomic, weak, nullable)   id <F53OSCPacketDestination> delegate;
 
-- (NSData *) oscTimeTagData
-{
-    return [[self oscTimeTag] oscTimeTagData];
-}
+- (BOOL) startListening;
+- (void) stopListening;
+
+@end
+
+
+@protocol F53OSCPacketDestination
+
+- (void) takeMessage:(nullable F53OSCMessage *)message;
 
 @end
 

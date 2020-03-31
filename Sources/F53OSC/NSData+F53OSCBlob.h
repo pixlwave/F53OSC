@@ -1,9 +1,9 @@
 //
-//  F53OSCPacket.m
+//  NSData+F53OSCBlob.h
 //
 //  Created by Sean Dougall on 1/17/11.
 //
-//  Copyright (c) 2011-2018 Figure 53 LLC, https://figure53.com
+//  Copyright (c) 2011-2020 Figure 53 LLC, https://figure53.com
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,35 +24,18 @@
 //  THE SOFTWARE.
 //
 
-#if !__has_feature(objc_arc)
-#error This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
-#endif
-
-#import "F53OSCPacket.h"
+#import <Foundation/Foundation.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation F53OSCPacket
+@interface NSData (F53OSCBlobAdditions)
 
-- (id) copyWithZone:(nullable NSZone *)zone
-{
-    F53OSCPacket *copy = [[self class] allocWithZone:zone];
-    copy.replySocket = self.replySocket;
-    return copy;
-}
+- (NSData *) oscBlobData;
++ (nullable NSData *) dataWithOSCBlobBytes:(const char *)buf maxLength:(NSUInteger)maxLength bytesRead:(out NSUInteger *)outBytesRead;
 
-- (nullable NSData *) packetData
-{
-    // Defined by subclasses.
-    return nil;
-}
-
-- (nullable NSString *) asQSC
-{
-    // Defined by subclasses.
-    return nil;
-}
+// deprecated
++ (nullable NSData *) dataWithOSCBlobBytes:(const char *)buf maxLength:(NSUInteger)maxLength length:(NSUInteger *)outLength DEPRECATED_MSG_ATTRIBUTE("Use +dataWithOSCBlobBytes:maxLength:bytesRead: instead");
 
 @end
 

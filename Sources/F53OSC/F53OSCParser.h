@@ -1,9 +1,9 @@
 //
-//  NSNumber+F53OSCNumber.h
+//  F53OSCParser.h
 //
-//  Created by Sean Dougall on 3/23/11.
+//  Created by Christopher Ashworth on 1/30/13.
 //
-//  Copyright (c) 2011-2018 Figure 53 LLC, https://figure53.com
+//  Copyright (c) 2013-2020 Figure 53 LLC, https://figure53.com
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,15 +26,20 @@
 
 #import <Foundation/Foundation.h>
 
+#import "F53OSCProtocols.h"
+
+@class F53OSCSocket;
+
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSNumber (F53OSCNumberAdditions)
+@interface F53OSCParser : NSObject
 
-- (SInt32) oscFloatValue;
-- (SInt32) oscIntValue;
-+ (nullable NSNumber *) numberWithOSCFloatBytes:(const char *)buf maxLength:(NSUInteger)maxLength;
-+ (nullable NSNumber *) numberWithOSCIntBytes:(const char *)buf maxLength:(NSUInteger)maxLength;
++ (nullable F53OSCMessage *) parseOscMessageData:(NSData *)data;
+
++ (void) processOscData:(NSData *)data forDestination:(id <F53OSCPacketDestination>)destination replyToSocket:(F53OSCSocket *)socket;
+
++ (void) translateSlipData:(NSData *)slipData toData:(NSMutableData *)data withState:(NSMutableDictionary *)state destination:(id <F53OSCPacketDestination>)destination;
 
 @end
 

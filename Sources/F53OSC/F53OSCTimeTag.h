@@ -1,9 +1,9 @@
 //
-//  NSString+F53OSCString.h
+//  F53OSCTimeTag.h
 //
 //  Created by Sean Dougall on 1/17/11.
 //
-//  Copyright (c) 2011-2018 Figure 53 LLC, https://figure53.com
+//  Copyright (c) 2011-2020 Figure 53 LLC, https://figure53.com
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,16 +29,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSString (F53OSCStringAdditions)
+@interface F53OSCTimeTag : NSObject 
 
-- (NSData *) oscStringData;
-+ (nullable NSString *) stringWithOSCStringBytes:(const char *)buf maxLength:(NSUInteger)maxLength bytesRead:(out NSUInteger *)outBytesRead;
+@property (assign) UInt32 seconds;
+@property (assign) UInt32 fraction;
 
-// Escapes characters that are special in regex (ICU v3) but not special in OSC.
-+ (NSString *) stringWithSpecialRegexCharactersEscaped:(NSString *)string;
++ (F53OSCTimeTag *) timeTagWithDate:(NSDate *)date;
++ (F53OSCTimeTag *) immediateTimeTag;
 
-// deprecated
-+ (nullable NSString *) stringWithOSCStringBytes:(const char *)buf maxLength:(NSUInteger)maxLength length:(NSUInteger *)outLength DEPRECATED_MSG_ATTRIBUTE("Use +stringWithOSCStringBytes:maxLength:bytesRead: instead");
+- (NSData *) oscTimeTagData;
++ (nullable F53OSCTimeTag *) timeTagWithOSCTimeBytes:(char *)buf;
 
 @end
 
